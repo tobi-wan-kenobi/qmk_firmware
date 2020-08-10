@@ -24,11 +24,33 @@ void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state
 void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_U, KC_Y); }
 void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_S, KC_S); }
 
+uint8_t multishift_status = 0;
+void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *userdata)
+{
+	if (state->pressed) {
+		register_code(KC_LSHIFT);
+		multishift_status = 1;
+	} else {
+		multishift_status = 0;
+		if (state->count == 1) {
+			tap_code(KC_ESC);
+		} else {
+			tap_code(KC_CAPS);
+		}
+	}
+}
+void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *userdata)
+{
+	if (multishift_status == 1)
+		unregister_code(KC_LSHIFT);
+}
+
 enum {
 	TD_A,
 	TD_O,
 	TD_U,
 	TD_S,
+	TD_SFT_ESC_CAPS
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -36,6 +58,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_O] = ACTION_TAP_DANCE_FN(td_o_cb),
 	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
 	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
+	[TD_SFT_ESC_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_sft_esc_caps_cb, td_sft_esc_caps_reset_cb),
 };
 
 #if 0
@@ -69,24 +92,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		KC_BSPACE,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
-		KC_CAPSLOCK,		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_BSPACE,
+		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
 		_______,			_______,					_______,				_______,		OSL(2),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
 		OSM(MOD_LALT),
-		LGUI_T(KC_SPACE),	LSFT_T(KC_ESCAPE),			OSM(MOD_LCTL),
+		LCTL_T(KC_SPACE),	LSFT_T(KC_ENTER),			OSM(MOD_LCTL),
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_BSPACE,
 		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
-		KC_BSPACE,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
+		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
 		OSL(1),				OSL(3),						_______,				_______,		_______,
 
 		/* right hand thumbs */
-		_______,		OSM(MOD_RCTL),
+		_______,			OSM(MOD_RCTL),
 		OSM(MOD_RALT),
-		OSM(MOD_RCTL),	RSFT_T(KC_TAB),					LCTL_T(KC_ENTER)
+		OSM(MOD_RCTL),		TD(TD_SFT_ESC_CAPS),			LGUI_T(KC_TAB)
 	),
 	[1] = LAYOUT_ergodox(
 		/* left hand */
@@ -116,7 +139,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				_______,		_______,		_______,
+		_______,			_______,					_______,				KC_DELETE,		KC_BSPACE,		_______,
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
