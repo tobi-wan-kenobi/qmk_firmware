@@ -7,6 +7,37 @@ enum custom_keycodes {
   ST_MACRO_1,
 };
 
+void multitap_ralt(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
+{
+	if (state->count == limit) {
+		register_code(KC_RALT);
+		tap_code(multi_code);
+		unregister_code(KC_RALT);
+	} else {
+		for (int i = 0; i < state->count; ++i)
+			tap_code(single_code);
+	}
+}
+
+void td_a_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_A, KC_Q); }
+void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_O, KC_P); }
+void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_U, KC_Y); }
+void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_S, KC_S); }
+
+enum {
+	TD_A,
+	TD_O,
+	TD_U,
+	TD_S,
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+	[TD_A] = ACTION_TAP_DANCE_FN(td_a_cb),
+	[TD_O] = ACTION_TAP_DANCE_FN(td_o_cb),
+	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
+	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
+};
+
 #if 0
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
@@ -37,9 +68,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
-		KC_BSPACE,			KC_A,						KC_S,					KC_D,			KC_F,			KC_G,
+		KC_BSPACE,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
 		KC_CAPSLOCK,		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_BSPACE,
-		RALT(KC_Q),			RALT(KC_P),					RALT(KC_Y),				RALT(KC_S),		OSL(2),
+		_______,			_______,					_______,				_______,		OSL(2),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
@@ -47,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		LGUI_T(KC_SPACE),	LSFT_T(KC_ESCAPE),			OSM(MOD_LCTL),
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_BSPACE,
-		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			KC_DELETE,
+		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
 		KC_BSPACE,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
 		OSL(1),				OSL(3),						_______,				_______,		_______,
