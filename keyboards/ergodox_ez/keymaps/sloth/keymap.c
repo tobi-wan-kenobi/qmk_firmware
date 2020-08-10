@@ -7,6 +7,13 @@ enum custom_keycodes {
   ST_MACRO_1,
 };
 
+enum layers {
+	BASE = 0,
+	CODING = 1,
+	MOVEMENT = 2,
+	NETWORK = 3,
+};
+
 void multitap_ralt(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
 {
 	if (state->count == limit) {
@@ -45,12 +52,34 @@ void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *userdata)
 		unregister_code(KC_LSHIFT);
 }
 
+void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *userdata)
+{
+	if (state->pressed) {
+		layer_on(CODING);
+	} else {
+		static uint8_t layer = MOVEMENT;
+		static uint8_t on = 0;
+		if (on == 0) {
+			layer = state->count > 1 ? NETWORK : MOVEMENT;
+			layer_on(layer);
+		} else {
+			layer_off(layer);
+		}
+		on = !on;
+	}
+}
+void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *userdata)
+{
+	layer_off(CODING);
+}
+
 enum {
 	TD_A,
 	TD_O,
 	TD_U,
 	TD_S,
-	TD_SFT_ESC_CAPS
+	TD_SFT_ESC_CAPS,
+	TD_TT1_TL2,
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -59,6 +88,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
 	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
 	[TD_SFT_ESC_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_sft_esc_caps_cb, td_sft_esc_caps_reset_cb),
+	[TD_TT1_TL2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_tt1_tt2_cb, td_tt1_tt2_reset_cb),
 };
 
 #if 0
@@ -87,13 +117,13 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #endif
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	[0] = LAYOUT_ergodox(
+	[BASE] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
-		KC_BSPACE,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
+		_______,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
 		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
-		_______,			_______,					_______,				_______,		OSL(2),
+		_______,			_______,					_______,				_______,		KC_BSPACE,
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
@@ -104,14 +134,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
 		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
-		OSL(1),				OSL(3),						_______,				_______,		_______,
+		TD(TD_TT1_TL2),		_______,					_______,				_______,		_______,
 
 		/* right hand thumbs */
 		_______,			OSM(MOD_RCTL),
 		OSM(MOD_RALT),
 		OSM(MOD_RCTL),		TD(TD_SFT_ESC_CAPS),			LGUI_T(KC_TAB)
 	),
-	[1] = LAYOUT_ergodox(
+	[CODING] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					KC_AT,					KC_LBRACKET,	KC_RBRACKET,	KC_DLR,			_______,
@@ -135,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,
 		_______,			_______,					_______
 	),
-	[2] = LAYOUT_ergodox(
+	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
@@ -159,7 +189,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,
 		_______,			_______,					_______
 	),
-	[3] = LAYOUT_ergodox(
+	[NETWORK] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				KC_COLN,		ST_MACRO_1,		_______,		_______,
