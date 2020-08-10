@@ -121,9 +121,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
-		_______,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
+		KC_LEAD,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
 		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
-		_______,			_______,					_______,				_______,		KC_BSPACE,
+		_______,			_______,					_______,				KC_LEAD,		KC_BSPACE,
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
 		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
-		TD(TD_TT1_TL2),		_______,					_______,				_______,		_______,
+		TD(TD_TT1_TL2),		KC_LEAD,					_______,				_______,		_______,
 
 		/* right hand thumbs */
 		_______,			OSM(MOD_RCTL),
@@ -215,6 +215,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 
 };
+
+LEADER_EXTERNS();
+void matrix_scan_user(void)
+{
+	LEADER_DICTIONARY() {
+		leading = false;
+		leader_end();
+		SEQ_TWO_KEYS(KC_F, KC_L) {
+			register_code(KC_LGUI);
+			tap_code16(KC_L);
+			unregister_code(KC_LGUI);
+		}
+		SEQ_TWO_KEYS(KC_F, KC_H) {
+			register_code(KC_LGUI);
+			tap_code16(KC_H);
+			unregister_code(KC_LGUI);
+		}
+		SEQ_TWO_KEYS(KC_M, KC_L) {
+			register_code(KC_LGUI);
+			register_code(KC_LSHIFT);
+			tap_code16(KC_L);
+			unregister_code(KC_LGUI);
+			unregister_code(KC_LSHIFT);
+		}
+		SEQ_TWO_KEYS(KC_M, KC_H) {
+			register_code(KC_LGUI);
+			register_code(KC_LSHIFT);
+			tap_code16(KC_H);
+			unregister_code(KC_LGUI);
+			unregister_code(KC_LSHIFT);
+		}
+	}
+}
 
 extern bool g_suspend_state;
 extern rgb_config_t rgb_matrix_config;
