@@ -20,20 +20,16 @@ enum tap_dance {
 	TD_O,
 	TD_U,
 	TD_S,
-	TD_SFT_ESC_CAPS,
+	TD_ESC_CAPS,
 	TD_TT1_TL2,
 };
 
 #define HOLD(STATE) STATE->pressed && !STATE->interrupted
 
-typedef struct {
-	bool on;
-} td_multishift_t;
-
 void multitap(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
 {
 	if (state->count == limit) {
-		tap_code(multi_code);
+		tap_code16(multi_code);
 	} else {
 		for (int i = 0; i < state->count; ++i)
 			tap_code(single_code);
@@ -44,29 +40,6 @@ void td_a_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, 
 void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_O, RALT(KC_P)); }
 void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_U, RALT(KC_Y)); }
 void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_S, RALT(KC_S)); }
-
-void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *user_data)
-{
-	td_multishift_t* multishift = (td_multishift_t*)user_data;
-	if (HOLD(state)) {
-		register_code(KC_LSHIFT);
-		multishift->on = true;
-	} else {
-		multishift->on = false;
-		if (state->count == 1) {
-			tap_code(KC_ESC);
-		} else {
-			tap_code(KC_CAPS);
-		}
-	}
-}
-void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *user_data)
-{
-	td_multishift_t* multishift = (td_multishift_t*)user_data;
-	if (multishift->on)
-		unregister_code(KC_LSHIFT);
-	multishift->on = false;
-}
 
 void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *user_data)
 {
@@ -96,10 +69,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_O] = ACTION_TAP_DANCE_FN(td_o_cb),
 	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
 	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
-	[TD_SFT_ESC_CAPS] = {
-		.fn = { NULL, td_sft_esc_caps_cb, td_sft_esc_caps_reset_cb },
-		.user_data = (void*)&((td_multishift_t) { false }),
-	},
+	[TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
 	[TD_TT1_TL2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_tt1_tt2_cb, td_tt1_tt2_reset_cb),
 };
 
@@ -134,24 +104,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		KC_LEAD,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
-		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			OSM(MOD_LGUI),
-		_______,			_______,					_______,				OSM(MOD_LCTL),	TD(TD_SFT_ESC_CAPS),
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			TD(TD_ESC_CAPS),
+		KC_UP,				KC_DOWN,					OSM(MOD_LALT),			OSM(MOD_LCTL),	OSM(MOD_LGUI),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
-		OSM(MOD_LALT),
-		LCTL_T(KC_SPACE),	KC_ENTER,					KC_LEAD,
+		_______,
+		KC_SPACE,			LSFT_T(KC_TAB),				_______,
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_BSPACE,
 		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
-		OSM(MOD_RCTL),		KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
-		TD(TD_TT1_TL2),		OSM(MOD_RGUI),				_______,				_______,		_______,
+		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
+		TD(TD_TT1_TL2),		OSM(MOD_RCTL),				OSM(MOD_RALT),			KC_LEFT,		KC_RIGHT,
 
 		/* right hand thumbs */
 		_______,			OSM(MOD_RCTL),
-		OSM(MOD_RALT),
-		_______,			RSFT_T(KC_TAB),				KC_BSPACE
+		_______,
+		_______,			RSFT_T(KC_ENTER),			KC_BSPACE
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -256,31 +226,27 @@ LEADER_EXTERNS();
 void matrix_scan_user(void)
 {
 	LEADER_DICTIONARY() {
-		leading = false;
-		leader_end();
+		SEQ_ONE_KEY(KC_C) {
+			tap_code16(LGUI(LSFT(KC_C)));
+		}
 		SEQ_TWO_KEYS(KC_F, KC_L) {
-			register_code(KC_LGUI);
-			tap_code16(KC_L);
-			unregister_code(KC_LGUI);
+			tap_code16(LGUI(KC_L));
 		}
 		SEQ_TWO_KEYS(KC_F, KC_H) {
 			register_code(KC_LGUI);
-			tap_code16(KC_H);
-			unregister_code(KC_LGUI);
+			tap_code16(LGUI(KC_H));
 		}
 		SEQ_TWO_KEYS(KC_M, KC_L) {
-			register_code(KC_LGUI);
-			register_code(KC_LSHIFT);
-			tap_code16(KC_L);
-			unregister_code(KC_LGUI);
-			unregister_code(KC_LSHIFT);
+			tap_code16(LGUI(LSFT(KC_L)));
 		}
 		SEQ_TWO_KEYS(KC_M, KC_H) {
-			register_code(KC_LGUI);
-			register_code(KC_LSHIFT);
-			tap_code16(KC_H);
-			unregister_code(KC_LGUI);
-			unregister_code(KC_LSHIFT);
+			tap_code16(LGUI(LSFT(KC_H)));
+		}
+		SEQ_TWO_KEYS(KC_W, KC_H) {
+			tap_code16(LGUI(LCTL(KC_H)));
+		}
+		SEQ_TWO_KEYS(KC_W, KC_L) {
+			tap_code16(LGUI(LCTL(KC_L)));
 		}
 	}
 }
