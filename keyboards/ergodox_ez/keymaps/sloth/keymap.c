@@ -14,31 +14,40 @@ enum layers {
 	NETWORK = 3,
 };
 
-void multitap_ralt(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
+enum tap_dance {
+	TD_A,
+	TD_O,
+	TD_U,
+	TD_S,
+	TD_SFT_ESC_CAPS,
+	TD_TT1_TL2,
+};
+
+#define HOLD(STATE) STATE->pressed && !STATE->interrupted
+
+typedef struct {
+	bool on;
+} td_multishift_t;
+
+void multitap(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
 {
 	if (state->count == limit) {
-		register_code(KC_RALT);
 		tap_code(multi_code);
-		unregister_code(KC_RALT);
 	} else {
 		for (int i = 0; i < state->count; ++i)
 			tap_code(single_code);
 	}
 }
 
-void td_a_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_A, KC_Q); }
-void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_O, KC_P); }
-void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_U, KC_Y); }
-void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_S, KC_S); }
-
-typedef struct {
-	bool on;
-} td_multishift_t;
+void td_a_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_A, RALT(KC_Q)); }
+void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_O, RALT(KC_P)); }
+void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_U, RALT(KC_Y)); }
+void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_S, RALT(KC_S)); }
 
 void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *user_data)
 {
 	td_multishift_t* multishift = (td_multishift_t*)user_data;
-	if (state->pressed && !state->interrupted) {
+	if (HOLD(state)) {
 		register_code(KC_LSHIFT);
 		multishift->on = true;
 	} else {
@@ -60,7 +69,7 @@ void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *user_data)
 
 void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *user_data)
 {
-	if (state->pressed && !state->interrupted) {
+	if (HOLD(state)) {
 		layer_on(CODING);
 	} else {
 		static uint8_t layer = MOVEMENT;
@@ -80,15 +89,6 @@ void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *user_data)
 	if (state->count == 1)
 		layer_off(CODING);
 }
-
-enum {
-	TD_A,
-	TD_O,
-	TD_U,
-	TD_S,
-	TD_SFT_ESC_CAPS,
-	TD_TT1_TL2,
-};
 
 qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_A] = ACTION_TAP_DANCE_FN(td_a_cb),
