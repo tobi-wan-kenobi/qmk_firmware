@@ -31,14 +31,18 @@ void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state
 void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_U, KC_Y); }
 void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state, 3, KC_S, KC_S); }
 
-uint8_t multishift_status = 0;
-void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *userdata)
+typedef struct {
+	bool on;
+} td_multishift_t;
+
+void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *user_data)
 {
+	td_multishift_t* multishift = (td_multishift_t*)user_data;
 	if (state->pressed && !state->interrupted) {
 		register_code(KC_LSHIFT);
-		multishift_status = 1;
+		multishift->on = true;
 	} else {
-		multishift_status = 0;
+		multishift->on = false;
 		if (state->count == 1) {
 			tap_code(KC_ESC);
 		} else {
@@ -46,13 +50,15 @@ void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *userdata)
 		}
 	}
 }
-void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *userdata)
+void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *user_data)
 {
-	if (multishift_status == 1)
+	td_multishift_t* multishift = (td_multishift_t*)user_data;
+	if (multishift->on)
 		unregister_code(KC_LSHIFT);
+	multishift->on = false;
 }
 
-void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *userdata)
+void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *user_data)
 {
 	if (state->pressed && !state->interrupted) {
 		layer_on(CODING);
@@ -69,7 +75,7 @@ void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *userdata)
 		}
 	}
 }
-void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *userdata)
+void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *user_data)
 {
 	if (state->count == 1)
 		layer_off(CODING);
@@ -89,7 +95,10 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_O] = ACTION_TAP_DANCE_FN(td_o_cb),
 	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
 	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
-	[TD_SFT_ESC_CAPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_sft_esc_caps_cb, td_sft_esc_caps_reset_cb),
+	[TD_SFT_ESC_CAPS] = {
+		.fn = { NULL, td_sft_esc_caps_cb, td_sft_esc_caps_reset_cb },
+		.user_data = (void*)&((td_multishift_t) { false }),
+	},
 	[TD_TT1_TL2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_tt1_tt2_cb, td_tt1_tt2_reset_cb),
 };
 
