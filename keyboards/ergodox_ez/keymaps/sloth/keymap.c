@@ -34,7 +34,7 @@ void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap_ralt(state
 uint8_t multishift_status = 0;
 void td_sft_esc_caps_cb(qk_tap_dance_state_t *state, void *userdata)
 {
-	if (state->pressed) {
+	if (state->pressed && !state->interrupted) {
 		register_code(KC_LSHIFT);
 		multishift_status = 1;
 	} else {
@@ -54,23 +54,25 @@ void td_sft_esc_caps_reset_cb(qk_tap_dance_state_t *state, void *userdata)
 
 void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *userdata)
 {
-	if (state->pressed) {
+	if (state->pressed && !state->interrupted) {
 		layer_on(CODING);
 	} else {
 		static uint8_t layer = MOVEMENT;
 		static uint8_t on = 0;
 		if (on == 0) {
 			layer = state->count > 1 ? NETWORK : MOVEMENT;
+			on = 1;
 			layer_on(layer);
 		} else {
+			on = 0;
 			layer_off(layer);
 		}
-		on = !on;
 	}
 }
 void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *userdata)
 {
-	layer_off(CODING);
+	if (state->count == 1)
+		layer_off(CODING);
 }
 
 enum {
@@ -122,24 +124,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		KC_LEAD,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
-		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
-		_______,			_______,					_______,				KC_LEAD,		KC_BSPACE,
+		_______,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			OSM(MOD_LGUI),
+		_______,			_______,					_______,				OSM(MOD_LCTL),	TD(TD_SFT_ESC_CAPS),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		_______,
 		OSM(MOD_LALT),
-		LCTL_T(KC_SPACE),	LSFT_T(KC_ENTER),			OSM(MOD_LCTL),
+		LCTL_T(KC_SPACE),	KC_ENTER,					KC_LEAD,
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_BSPACE,
 		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
-		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
-		TD(TD_TT1_TL2),		KC_LEAD,					_______,				_______,		_______,
+		OSM(MOD_RCTL),		KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		_______,
+		TD(TD_TT1_TL2),		OSM(MOD_RGUI),				_______,				_______,		_______,
 
 		/* right hand thumbs */
 		_______,			OSM(MOD_RCTL),
 		OSM(MOD_RALT),
-		OSM(MOD_RCTL),		TD(TD_SFT_ESC_CAPS),			LGUI_T(KC_TAB)
+		_______,			RSFT_T(KC_TAB),				KC_BSPACE
 	),
 	[CODING] = LAYOUT_ergodox(
 		/* left hand */
@@ -155,8 +157,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			KC_CIRC,					KC_LPRN,				KC_RPRN,		KC_HASH,		_______,		_______,
-		KC_GRAVE,			KC_EQUAL,					KC_AMPR,				KC_PERC,		KC_QUES,		_______,
+		_______,			KC_CIRC,					KC_LPRN,				KC_RPRN,		KC_HASH,		KC_GRAVE,		_______,
+		KC_COLON,			KC_EQUAL,					KC_AMPR,				KC_PERC,		KC_QUES,		_______,
 		_______,			_______,					KC_DQUO,				KC_QUOTE,		KC_LCBR,		KC_RCBR,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
