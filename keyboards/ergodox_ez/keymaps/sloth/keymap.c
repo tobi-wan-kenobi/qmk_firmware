@@ -3,7 +3,6 @@
 
 enum custom_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
-  ST_MACRO_0,
   ST_MACRO_1,
 };
 
@@ -13,6 +12,7 @@ enum layers {
 	CODING = 2,
 	MOVEMENT = 3,
 	NETWORK = 4,
+	NONE = 255,
 };
 
 enum tap_dance {
@@ -20,11 +20,24 @@ enum tap_dance {
 	TD_O,
 	TD_U,
 	TD_S,
-	TD_ESC_CAPS,
-	TD_TT1_TL2,
+	TD_LAYERS,
 };
 
+enum td_key_state {
+	NOT_PRESSED = 0,
+	SINGLE_TAP = 1,
+	DOUBLE_TAP = 2,
+	PRESSED = 3,
+	ONESHOT = 4,
+};
+typedef struct {
+	uint8_t current_layer;
+	uint8_t state;
+} td_layerstate_t;
+
 #define HOLD(STATE) STATE->pressed && !STATE->interrupted
+
+#define HOLD_PERM(STATE) STATE->pressed
 
 void multitap(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, uint16_t multi_code)
 {
@@ -36,41 +49,54 @@ void multitap(qk_tap_dance_state_t* state, uint8_t limit, uint16_t single_code, 
 	}
 }
 
-void td_a_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_A, RALT(KC_Q)); }
-void td_o_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_O, RALT(KC_P)); }
-void td_u_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_U, RALT(KC_Y)); }
-void td_s_cb(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_S, RALT(KC_S)); }
+void td_a_finished(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_A, RALT(KC_Q)); }
+void td_o_finished(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_O, RALT(KC_P)); }
+void td_u_finished(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_U, RALT(KC_Y)); }
+void td_s_finished(qk_tap_dance_state_t *state, void *user_data) { multitap(state, 3, KC_S, RALT(KC_S)); }
 
-void td_tt1_tt2_cb(qk_tap_dance_state_t *state, void *user_data)
+void td_layers_finished(qk_tap_dance_state_t *state, void *user_data)
 {
+	td_layerstate_t* layer = (td_layerstate_t*)(user_data);
+
 	if (HOLD(state)) {
-		layer_on(CODING);
+		layer->state = PRESSED;
+		layer->current_layer = CODING;
 	} else {
-		static uint8_t layer = MOVEMENT;
-		static uint8_t on = 0;
-		if (on == 0) {
-			layer = state->count > 1 ? NETWORK : MOVEMENT;
-			on = 1;
-			layer_on(layer);
-		} else {
-			on = 0;
-			layer_off(layer);
-		}
+		if (layer->current_layer != NONE)
+			layer->current_layer = NONE;
+		else
+			layer->current_layer = state->count == 1 ? CODING : MOVEMENT;
+		if (layer->current_layer == CODING) layer->state = ONESHOT;
 	}
+	if (layer->state == ONESHOT)
+		set_oneshot_layer(layer->current_layer, ONESHOT_START);
+	else if (layer->current_layer != NONE)
+		layer_on(layer->current_layer);
 }
-void td_tt1_tt2_reset_cb(qk_tap_dance_state_t *state, void *user_data)
+
+void td_layers_reset(qk_tap_dance_state_t *state, void *user_data)
 {
-	if (state->count == 1)
-		layer_off(CODING);
+	td_layerstate_t* layer = (td_layerstate_t*)(user_data);
+
+	if (layer->current_layer == NONE) {
+		layer_clear();
+	} else {
+		if (layer->state == ONESHOT)
+			clear_oneshot_layer_state(ONESHOT_PRESSED);
+		if (layer->state == PRESSED)
+			layer_off(layer->current_layer);
+	}
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-	[TD_A] = ACTION_TAP_DANCE_FN(td_a_cb),
-	[TD_O] = ACTION_TAP_DANCE_FN(td_o_cb),
-	[TD_U] = ACTION_TAP_DANCE_FN(td_u_cb),
-	[TD_S] = ACTION_TAP_DANCE_FN(td_s_cb),
-	[TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
-	[TD_TT1_TL2] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, td_tt1_tt2_cb, td_tt1_tt2_reset_cb),
+	[TD_A] = ACTION_TAP_DANCE_FN(td_a_finished),
+	[TD_O] = ACTION_TAP_DANCE_FN(td_o_finished),
+	[TD_U] = ACTION_TAP_DANCE_FN(td_u_finished),
+	[TD_S] = ACTION_TAP_DANCE_FN(td_s_finished),
+	[TD_LAYERS] = {
+		.fn = { NULL, td_layers_finished, td_layers_reset },
+		.user_data = (void*)&((td_layerstate_t){ NONE, NOT_PRESSED })
+	},
 };
 
 #if 0
@@ -102,26 +128,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[BASE] = LAYOUT_ergodox(
 		/* left hand */
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
-		_______,			KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
-		KC_LEAD,			TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
-		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			TD(TD_ESC_CAPS),
-		KC_UP,				KC_DOWN,					OSM(MOD_LALT),			OSM(MOD_LCTL),	OSM(MOD_LGUI),
+		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
+		LCTL_T(KC_TAB),		TD(TD_A),					TD(TD_S),				KC_D,			KC_F,			KC_G,
+		LSFT_T(KC_LPRN),	KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_ESC,
+		_______,			_______,					_______,				TT(MOVEMENT),	KC_LEAD,
 
 		/* left hand thumbs */
-		OSM(MOD_LCTL),		_______,
-		_______,
-		KC_SPACE,			LSFT_T(KC_TAB),				_______,
+		OSM(MOD_LCTL),		OSM(MOD_LALT),
+		OSM(MOD_LSFT),
+		KC_SPACE,			KC_BSPACE,					OSM(MOD_LGUI),
 		/* right hand */
-		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_BSPACE,
-		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			KC_DELETE,
+		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			_______,
+		_______,			KC_Y,						TD(TD_U),				KC_I,			TD(TD_O),		KC_P,			_______,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
-		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
-		TD(TD_TT1_TL2),		OSM(MOD_RCTL),				OSM(MOD_RALT),			KC_LEFT,		KC_RIGHT,
+		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		RSFT_T(KC_RPRN),
+		KC_ENTER,			KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
 
 		/* right hand thumbs */
-		_______,			OSM(MOD_RCTL),
-		_______,
-		_______,			RSFT_T(KC_ENTER),			KC_BSPACE
+		OSM(MOD_RALT),		OSM(MOD_RCTL),
+		OSM(MOD_RSFT),
+		OSM(MOD_RGUI),		KC_TAB,						OSL(CODING)
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -150,9 +176,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[CODING] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					KC_AT,					KC_LBRACKET,	KC_RBRACKET,	KC_DLR,			_______,
-		_______,			KC_EXLM,					KC_ASTR,				KC_UNDS,		KC_MINUS,		KC_PLUS,
-		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		ST_MACRO_0,		_______,
+		_______,			KC_EXLM,					KC_AT,					KC_LCBR,		KC_RCBR,		KC_DLR,			_______,
+		_______,			KC_UNDS,					KC_ASTR,				KC_LBRACKET,	KC_RBRACKET,	KC_PLUS,
+		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
 		/* left hand thumbs */
@@ -161,9 +187,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			KC_CIRC,					KC_LPRN,				KC_RPRN,		KC_HASH,		KC_GRAVE,		_______,
-		KC_COLON,			KC_EQUAL,					KC_AMPR,				KC_PERC,		KC_QUES,		_______,
-		_______,			_______,					KC_DQUO,				KC_QUOTE,		KC_LCBR,		KC_RCBR,		_______,
+		_______,			KC_CIRC,					KC_AMPR,				KC_PERC,		KC_HASH,		KC_QUES,		_______,
+		KC_COLON,			KC_EQUAL,					KC_LPRN,				KC_RPRN,		KC_QUES,		KC_GRAVE,
+		_______,			_______,					KC_DQUO,				KC_QUOTE,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
 		/* right hand thumbs */
@@ -174,8 +200,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				KC_DELETE,		KC_BSPACE,		_______,
+		_______,			_______,					KC_HOME,				KC_UP,			KC_END,			KC_PGUP,		_______,
+		_______,			_______,					KC_LEFT,				KC_DOWN,		KC_RIGHT,		KC_PGDOWN,
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
@@ -185,8 +211,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					KC_HOME,				LCTL(KC_LEFT),	LCTL(KC_RIGHT),	KC_END,			_______,
-		_______,			KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,		_______,
+		_______,			KC_PGUP,					KC_HOME,				LCTL(KC_LEFT),	LCTL(KC_RIGHT),	KC_END,			_______,
+		KC_PGDOWN,			KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,		_______,
 		_______,			_______,					_______,				_______,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
@@ -311,12 +337,6 @@ void rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case ST_MACRO_0:
-    if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_MINUS) SS_DELAY(100) SS_LSFT(SS_TAP(X_COMMA)));
-
-    }
-    break;
     case ST_MACRO_1:
     if (record->event.pressed) {
       SEND_STRING(SS_TAP(X_R) SS_DELAY(100) SS_TAP(X_O) SS_DELAY(100) SS_TAP(X_O) SS_DELAY(100) SS_TAP(X_T));
