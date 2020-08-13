@@ -3,7 +3,6 @@
 
 enum custom_keycodes {
   RGB_SLD = EZ_SAFE_RANGE,
-  ST_MACRO_1,
 };
 
 enum layers {
@@ -11,7 +10,6 @@ enum layers {
 	COLEMAK = 1,
 	CODING = 2,
 	MOVEMENT = 3,
-	NETWORK = 4,
 	NONE = 255,
 };
 
@@ -46,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		LCTL_T(KC_TAB),		KC_A,						KC_S,					KC_D,			KC_F,			KC_G,
-		KC_LSPO,			KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_LEAD,
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_ESC,
 		_______,			_______,					_______,				TT(MOVEMENT),	OSM(MOD_LGUI),
 
 		/* left hand thumbs */
@@ -55,15 +53,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_SPACE,			KC_TAB,						_______,
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			_______,
-		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			KC_LEAD,
-		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_MINUS,
-		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		KC_RSPC,
+		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			_______,
+		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_ENTER,
+		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
 
 		/* right hand thumbs */
 		OSM(MOD_RALT),		OSM(MOD_RCTL),
 		OSM(MOD_RSFT),
-		KC_LEAD,			KC_ENTER,					KC_BSPACE
+		KC_LEAD,			KC_LEAD,					KC_BSPACE
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -93,8 +91,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			KC_F1,						KC_F2,					KC_F3,			KC_F4,			KC_F5,			_______,
 		_______,			KC_EXLM,					KC_AT,					KC_LCBR,		KC_RCBR,		KC_DLR,			_______,
-		_______,			KC_UNDS,					KC_ASTR,				KC_LBRACKET,	KC_RBRACKET,	KC_PLUS,
-		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		_______,		_______,
+		_______,			KC_UNDS,					KC_ASTR,				KC_LBRACKET,	KC_RBRACKET,	KC_MINUS,
+		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		KC_PLUS,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
 		/* left hand thumbs */
@@ -104,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand */
 		_______,			KC_F6,						KC_F7,					KC_F8,			KC_F9,			KC_F10,			_______,
 		_______,			KC_CIRC,					KC_EQUAL,				KC_AMPR,		KC_HASH,		KC_QUES,		_______,
-		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_PERC,		KC_COLON,		KC_MINUS,
+		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_PERC,		KC_COLON,		_______,
 		_______,			_______,					KC_DQUO,				KC_QUOTE,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
@@ -136,32 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,
 		_______,
 		_______,			_______,					_______
-	),
-	[NETWORK] = LAYOUT_ergodox(
-		/* left hand */
-		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				KC_COLN,		ST_MACRO_1,		_______,		_______,
-		_______,			KC_1,						KC_2,					KC_3,			KC_4,			KC_5,
-		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
-
-		/* left hand thumbs */
-		_______,			_______,
-		_______,
-		_______,			_______,					_______,
-		/* right hand */
-		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					KC_AT,					_______,		_______,		_______,		_______,
-		KC_6,				KC_7,						KC_8,					KC_9,			KC_0,			_______,
-		_______,			_______,					_______,				_______,		_______,		_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
-
-		/* right hand thumbs */
-		_______,			_______,
-		_______,
-		_______,			_______,					_______
-	),
-
+	)
 };
 
 LEADER_EXTERNS();
@@ -225,8 +198,6 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
 
     [MOVEMENT] = { {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {33,255,255}, {33,255,255}, {33,255,255}, {33,255,255}, {0,0,255}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255} },
 
-    [NETWORK] = { {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {33,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255}, {14,255,255} },
-
 };
 
 void set_layer_color(int layer) {
@@ -270,12 +241,6 @@ void rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case ST_MACRO_1:
-    if (record->event.pressed) {
-      SEND_STRING(SS_TAP(X_R) SS_DELAY(100) SS_TAP(X_O) SS_DELAY(100) SS_TAP(X_O) SS_DELAY(100) SS_TAP(X_T));
-
-    }
-    break;
     case RGB_SLD:
       if (record->event.pressed) {
         rgblight_mode(1);
