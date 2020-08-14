@@ -252,12 +252,12 @@ void rgb_matrix_indicators_user(void)
 
 	rgb_matrix_set_color_all(0, 0, 0);
 
+	set_layer_color();
+
 	set_color(MOD_MASK_SHIFT);
 	set_color(MOD_MASK_CTRL);
 	set_color(MOD_MASK_ALT);
 	set_color(MOD_MASK_GUI);
-
-	set_layer_color();
 }
 
 void oneshot_mods_changed_user(uint8_t mods)
@@ -291,7 +291,7 @@ uint32_t layer_state_set_user(uint32_t state) {
 	col->on = false;
 	uint8_t coding[] = { RGB_TEAL };
 	uint8_t movement[] = { RGB_ORANGE };
-	uint8_t colemak[] = { RGB_MAGENTA };
+	uint8_t colemak[] = { RGB_RED };
 	switch (layer) {
 		case BASE:
 			break;
