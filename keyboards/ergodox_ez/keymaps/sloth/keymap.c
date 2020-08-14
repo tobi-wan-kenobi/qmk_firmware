@@ -194,7 +194,7 @@ void keyboard_post_init_user(void)
 
 struct colordef_t {
 	bool on;
-	int8_t idx[10];
+	int8_t idx[11];
 	uint8_t rgb[3];
 };
 
@@ -224,7 +224,7 @@ struct colordef_t modifier_colors[] = {
 };
 
 struct colordef_t layer_color = {
-	.on = false, .idx = { 23, 22, 21, 20, 44, 45, 46, 47, -1 },
+	.on = false, .idx = { 28, 27, 26, 25, 24, 0, 1, 2, 3, 4, -1 },
 };
 
 void set_layer_color(void)
@@ -291,11 +291,14 @@ uint32_t layer_state_set_user(uint32_t state) {
 	col->on = false;
 	uint8_t coding[] = { RGB_TEAL };
 	uint8_t movement[] = { RGB_ORANGE };
+	uint8_t colemak[] = { RGB_MAGENTA };
 	switch (layer) {
 		case BASE:
 			break;
 		case COLEMAK:
 			ergodox_right_led_1_on();
+			memcpy(col->rgb, colemak, 3);
+			col->on = true;
 			break;
 		case CODING:
 			memcpy(col->rgb, coding, 3);
