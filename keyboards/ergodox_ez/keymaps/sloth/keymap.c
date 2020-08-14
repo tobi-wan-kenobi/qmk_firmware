@@ -44,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
 		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		LCTL_T(KC_TAB),		KC_A,						KC_S,					KC_D,			KC_F,			KC_G,
-		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_ESC,
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
 		_______,			_______,					_______,				TT(MOVEMENT),	OSM(MOD_LGUI),
 
 		/* left hand thumbs */
@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			_______,
 		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			_______,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_ENTER,
-		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
+		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
 
 		/* right hand thumbs */
@@ -98,7 +98,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand thumbs */
 		_______,			_______,
 		_______,
-		_______,			_______,					_______,
+		KC_ESC,				_______,					_______,
+
 		/* right hand */
 		_______,			KC_F6,						KC_F7,					KC_F8,			KC_F9,			KC_F10,			_______,
 		_______,			KC_CIRC,					KC_EQUAL,				KC_AMPR,		KC_HASH,		KC_QUES,		_______,
@@ -186,107 +187,128 @@ void matrix_scan_user(void)
 extern bool g_suspend_state;
 extern rgb_config_t rgb_matrix_config;
 
-void keyboard_post_init_user(void) {
-  rgb_matrix_enable();
+void keyboard_post_init_user(void)
+{
+	rgb_matrix_enable();
 }
 
-const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
-    [BASE] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {141,255,233}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
-    [COLEMAK] = { {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {141,255,233}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0} },
-
-    [CODING] = { {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233} },
-
-    [MOVEMENT] = { {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {33,255,255}, {33,255,255}, {33,255,255}, {33,255,255}, {0,0,255}, {141,255,233}, {141,255,233}, {141,255,233}, {141,255,233}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255}, {0,0,255} },
-
+struct colordef_t {
+	bool on;
+	int8_t idx[10];
+	uint8_t rgb[3];
 };
 
-void set_layer_color(int layer) {
-  for (int i = 0; i < DRIVER_LED_TOTAL; i++) {
-    HSV hsv = {
-      .h = pgm_read_byte(&ledmap[layer][i][0]),
-      .s = pgm_read_byte(&ledmap[layer][i][1]),
-      .v = pgm_read_byte(&ledmap[layer][i][2]),
-    };
-    if (!hsv.h && !hsv.s && !hsv.v) {
-        rgb_matrix_set_color( i, 0, 0, 0 );
-    } else {
-        RGB rgb = hsv_to_rgb( hsv );
-        float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
-        rgb_matrix_set_color( i, f * rgb.r, f * rgb.g, f * rgb.b );
-    }
-  }
+uint8_t colidx(uint16_t mask) {
+	switch (mask) {
+		case MOD_MASK_SHIFT: return 0;
+		case MOD_MASK_CTRL: return 1;
+		case MOD_MASK_ALT: return 2;
+		case MOD_MASK_GUI: return 3;
+		default: return -1;
+	}
+	return -1;
+}
+struct colordef_t modifier_colors[] = {
+	[0] = {
+		.on = false, .idx = { 4, 9, 14, 19, 28, 33, 38, 43, -1 }, .rgb = { RGB_GOLD },
+	},
+	[1] = {
+		.on = false, .idx = { 3, 8, 13, 18, 27, 32, 37, 42, -1 }, .rgb = { RGB_TEAL },
+	},
+	[2] = {
+		.on = false, .idx = { 2, 7, 12, 17, 26, 31, 36, 41, -1 }, .rgb = { RGB_CORAL },
+	},
+	[3] = {
+		.on = false, .idx = { 1, 6, 11, 16, 25, 30, 35, 40, -1 }, .rgb = { RGB_SPRINGGREEN },
+	},
+};
+
+struct colordef_t layer_color = {
+	.on = false, .idx = { 23, 22, 21, 20, 44, 45, 46, 47, -1 },
+};
+
+void set_layer_color(void)
+{
+	if (layer_color.on == false) return;
+	for (uint8_t i = 0; layer_color.idx[i] != -1; ++i)
+		rgb_matrix_set_color(layer_color.idx[i], layer_color.rgb[0], layer_color.rgb[1], layer_color.rgb[2]);
 }
 
-void rgb_matrix_indicators_user(void) {
-  if (g_suspend_state || keyboard_config.disable_layer_led) { return; }
-  switch (biton32(layer_state)) {
-    case 0:
-      set_layer_color(0);
-      break;
-    case 1:
-      set_layer_color(1);
-      break;
-    case 2:
-      set_layer_color(2);
-      break;
-    case 3:
-      set_layer_color(3);
-      break;
-   default:
-    if (rgb_matrix_get_flags() == LED_FLAG_NONE)
-      rgb_matrix_set_color_all(0, 0, 0);
-    break;
-  }
+void set_color(uint16_t mask)
+{
+	uint8_t idx = colidx(mask);
+	if (idx < 0) return;
+	struct colordef_t* coldef = &modifier_colors[idx];
+
+	if (get_mods() & mask || coldef->on) {
+		for (uint8_t i = 0; coldef->idx[i] != -1; ++i)
+			rgb_matrix_set_color(coldef->idx[i], coldef->rgb[0], coldef->rgb[1], coldef->rgb[2]);
+	}
+}
+
+void rgb_matrix_indicators_user(void)
+{
+	if (g_suspend_state || keyboard_config.disable_layer_led) return;
+
+	rgb_matrix_set_color_all(0, 0, 0);
+
+	set_color(MOD_MASK_SHIFT);
+	set_color(MOD_MASK_CTRL);
+	set_color(MOD_MASK_ALT);
+	set_color(MOD_MASK_GUI);
+
+	set_layer_color();
+}
+
+void oneshot_mods_changed_user(uint8_t mods)
+{
+	modifier_colors[colidx(MOD_MASK_SHIFT)].on = mods & MOD_MASK_SHIFT;
+	modifier_colors[colidx(MOD_MASK_CTRL)].on = mods & MOD_MASK_CTRL;
+	modifier_colors[colidx(MOD_MASK_ALT)].on = mods & MOD_MASK_ALT;
+	modifier_colors[colidx(MOD_MASK_GUI)].on = mods & MOD_MASK_GUI;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case RGB_SLD:
-      if (record->event.pressed) {
-        rgblight_mode(1);
-      }
-      return false;
-  }
-  return true;
+	switch (keycode) {
+		case RGB_SLD:
+			if (record->event.pressed)
+				rgblight_mode(1);
+			return false;
+	}
+	return true;
 }
 
 uint32_t layer_state_set_user(uint32_t state) {
+	uint8_t layer = biton32(state);
 
-  uint8_t layer = biton32(state);
+	ergodox_board_led_off();
+	ergodox_right_led_1_off();
+	ergodox_right_led_2_off();
+	ergodox_right_led_3_off();
 
-  ergodox_board_led_off();
-  ergodox_right_led_1_off();
-  ergodox_right_led_2_off();
-  ergodox_right_led_3_off();
-  switch (layer) {
-    case 1:
-      ergodox_right_led_1_on();
-      break;
-    case 2:
-      ergodox_right_led_2_on();
-      break;
-    case 3:
-      ergodox_right_led_3_on();
-      break;
-    case 4:
-      ergodox_right_led_1_on();
-      ergodox_right_led_2_on();
-      break;
-    case 5:
-      ergodox_right_led_1_on();
-      ergodox_right_led_3_on();
-      break;
-    case 6:
-      ergodox_right_led_2_on();
-      ergodox_right_led_3_on();
-      break;
-    case 7:
-      ergodox_right_led_1_on();
-      ergodox_right_led_2_on();
-      ergodox_right_led_3_on();
-      break;
-    default:
-      break;
-  }
-  return state;
+	struct colordef_t* col = &layer_color;
+
+	col->on = false;
+	uint8_t coding[] = { RGB_TEAL };
+	uint8_t movement[] = { RGB_ORANGE };
+	switch (layer) {
+		case BASE:
+			break;
+		case COLEMAK:
+			ergodox_right_led_1_on();
+			break;
+		case CODING:
+			memcpy(col->rgb, coding, 3);
+			col->on = true;
+			ergodox_right_led_2_on();
+			break;
+		case MOVEMENT:
+			memcpy(col->rgb, movement, 3);
+			col->on = true;
+			ergodox_right_led_3_on();
+			break;
+		default:
+			break;
+	}
+	return state;
 };
