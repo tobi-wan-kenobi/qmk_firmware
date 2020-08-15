@@ -42,27 +42,27 @@ enum layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[BASE] = LAYOUT_ergodox(
 		/* left hand */
-		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			_______,
+		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			KC_HOME,
 		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
 		LCTL_T(KC_TAB),		KC_A,						KC_S,					KC_D,			KC_F,			KC_G,
-		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			_______,
-		_______,			_______,					_______,				TT(MOVEMENT),	OSM(MOD_LGUI),
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_ESC,
+		RGB_SOLID,			RGB_HEATMAP,				_______,				TT(MOVEMENT),	OSM(MOD_LGUI),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		OSM(MOD_LALT),
 		OSM(MOD_LSFT),
-		KC_SPACE,			OSM(MOD_LCTL),				_______,
+		KC_SPACE,			OSM(MOD_LGUI),				KC_LEAD,
 		/* right hand */
-		_______,			KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			RGB_HEATMAP,
-		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			RGB_SOLID,
-		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_ENTER,
-		_______,			KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
+		KC_END,				KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_PGUP,
+		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			KC_PGDOWN,
+		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_BSPACE,
+		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
 
 		/* right hand thumbs */
 		OSM(MOD_RALT),		OSM(MOD_RCTL),
 		OSM(MOD_RSFT),
-		KC_LEAD,			KC_LEAD,					KC_BSPACE
+		KC_LEAD,			OSM(MOD_LCTL),				KC_ENTER
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -91,9 +91,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[CODING] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			KC_F1,						KC_F2,					KC_F3,			KC_F4,			KC_F5,			_______,
-		_______,			KC_EXLM,					KC_AT,					KC_LCBR,		KC_RCBR,		KC_DLR,			_______,
-		_______,			KC_UNDS,					KC_ASTR,				KC_LBRACKET,	KC_RBRACKET,	KC_MINUS,
-		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		KC_PLUS,		_______,
+		_______,			KC_AT,						KC_LCBR,				KC_RCBR,		KC_EXLM,		KC_DLR,			_______,
+		_______,			KC_ASTR,					KC_LBRACKET,			KC_RBRACKET,	KC_MINUS,		KC_UNDS,
+		_______,			KC_PIPE,					KC_LABK,				KC_RABK,		KC_TILD,		KC_PLUS,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
 		/* left hand thumbs */
@@ -191,7 +191,7 @@ extern rgb_config_t rgb_matrix_config;
 void keyboard_post_init_user(void)
 {
 	rgb_matrix_enable();
-	rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+	rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
 }
 
 struct colordef_t {
@@ -275,11 +275,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	switch (keycode) {
 		case RGB_SOLID:
 			if (record->event.pressed)
-				rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
+				rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
 			return false;
 		case RGB_HEATMAP:
 			if (record->event.pressed)
-				rgb_matrix_mode(RGB_MATRIX_TYPING_HEATMAP);
+				rgb_matrix_mode_noeeprom(RGB_MATRIX_TYPING_HEATMAP);
 			return false;
 	}
 	return true;
