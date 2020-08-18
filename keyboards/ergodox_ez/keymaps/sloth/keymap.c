@@ -11,6 +11,7 @@ enum layers {
 	COLEMAK = 1,
 	CODING = 2,
 	MOVEMENT = 3,
+	UMLAUTS = 4,
 	NONE = 255,
 };
 
@@ -43,26 +44,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[BASE] = LAYOUT_ergodox(
 		/* left hand */
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,			KC_5,			KC_HOME,
-		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			_______,
+		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,			KC_T,			KC_PGUP,
 		LCTL_T(KC_TAB),		KC_A,						KC_S,					KC_D,			KC_F,			KC_G,
-		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			KC_ESC,
-		RGB_SOLID,			RGB_HEATMAP,				_______,				TT(MOVEMENT),	OSM(MOD_LGUI),
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,			KC_B,			LT(UMLAUTS, KC_ESC),
+		RGB_SOLID,			RGB_HEATMAP,				_______,				TT(MOVEMENT),	OSM(MOD_LCTL),
 
 		/* left hand thumbs */
 		OSM(MOD_LCTL),		OSM(MOD_LALT),
 		OSM(MOD_LSFT),
 		KC_SPACE,			OSM(MOD_LGUI),				KC_LEAD,
 		/* right hand */
-		KC_END,				KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			KC_PGUP,
-		_______,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			KC_PGDOWN,
+		KC_END,				KC_6,						KC_7,					KC_8,			KC_9,			KC_0,			_______,
+		KC_PGDOWN,			KC_Y,						KC_U,					KC_I,			KC_O,			KC_P,			_______,
 		KC_H,				KC_J,						KC_K,					KC_L,			KC_SCOLON,		KC_BSPACE,
-		KC_ESC,				KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
+		LT(UMLAUTS, KC_ESC),KC_N,						KC_M,					KC_COMMA,		KC_DOT,			KC_SLASH,		OSM(MOD_RSFT),
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
 
 		/* right hand thumbs */
 		OSM(MOD_RALT),		OSM(MOD_RCTL),
 		OSM(MOD_RSFT),
-		KC_LEAD,			OSM(MOD_LCTL),				KC_ENTER
+		KC_LEAD,			OSM(MOD_RSFT),				KC_ENTER
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -91,9 +92,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[CODING] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			KC_F1,						KC_F2,					KC_F3,			KC_F4,			KC_F5,			_______,
-		_______,			KC_AT,						KC_LCBR,				KC_RCBR,		KC_EXLM,		KC_DLR,			_______,
-		_______,			KC_ASTR,					KC_LBRACKET,			KC_RBRACKET,	KC_MINUS,		KC_UNDS,
-		_______,			KC_PIPE,					KC_LABK,				KC_RABK,		KC_TILD,		KC_PLUS,		_______,
+		_______,			KC_EXLM,					KC_AT,					KC_LCBR,		KC_RCBR,		KC_DLR,			_______,
+		_______,			KC_ASTR,					KC_MINUS,				KC_LBRACKET,	KC_RBRACKET,	KC_UNDS,
+		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,		KC_PLUS,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
 		/* left hand thumbs */
@@ -103,8 +104,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 		/* right hand */
 		_______,			KC_F6,						KC_F7,					KC_F8,			KC_F9,			KC_F10,			_______,
-		_______,			KC_CIRC,					KC_EQUAL,				KC_AMPR,		KC_HASH,		KC_QUES,		_______,
-		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_PERC,		KC_COLON,		_______,
+		_______,			KC_CIRC,					KC_EQUAL,				KC_PERC,		KC_HASH,		KC_QUES,		_______,
+		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_AMPR,		KC_COLON,		_______,
 		_______,			_______,					KC_DQUO,				KC_QUOTE,		_______,		_______,		_______,
 		_______,			_______,					_______,				_______,		_______,
 
@@ -135,8 +136,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand thumbs */
 		_______,			_______,
 		_______,
+		_______,			_______,					TG(MOVEMENT)
+	),
+	[UMLAUTS] = LAYOUT_ergodox(
+		/* left hand */
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			RALT(KC_Q),					RALT(KC_P),				RALT(KC_Y),		RALT(KC_S),		_______,
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,
+
+		/* left hand thumbs */
+		_______,			_______,
+		_______,
+		_______,			_______,					_______,
+		/* right hand */
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,		_______,		_______,
+		_______,			_______,					_______,				_______,		_______,
+
+		/* right hand thumbs */
+		_______,			_______,
+		_______,
 		_______,			_______,					_______
-	)
+	),
 };
 
 LEADER_EXTERNS();
@@ -248,6 +273,24 @@ void set_color(uint16_t mask)
 	}
 }
 
+void light_up_layers(void)
+{
+	if (layer_state_is(MOVEMENT)) {
+		uint8_t arrows[] = { 37, 36, 35, 31, 11, 12, 13, 14 };
+		uint8_t other_movement[] = { 32, 30, 29, 34, 6, 7, 8, 9 };
+		for (int i = 0; i < sizeof(arrows); ++i)
+			rgb_matrix_set_color(arrows[i], RGB_WHITE);
+		for (int i = 0; i < sizeof(other_movement); ++i)
+			rgb_matrix_set_color(other_movement[i], RGB_GOLDENROD);
+	}
+	if (layer_state_is(UMLAUTS)) {
+		uint8_t umlauts[] = { 38, 37, 36, 35 };
+		for (int i = 0; i < sizeof(umlauts); ++i)
+			rgb_matrix_set_color(umlauts[i], RGB_ORANGE);
+
+	}
+}
+
 void rgb_matrix_indicators_user(void)
 {
 	if (g_suspend_state || keyboard_config.disable_layer_led) return;
@@ -261,6 +304,8 @@ void rgb_matrix_indicators_user(void)
 	set_color(MOD_MASK_CTRL);
 	set_color(MOD_MASK_ALT);
 	set_color(MOD_MASK_GUI);
+
+	light_up_layers();
 }
 
 void oneshot_mods_changed_user(uint8_t mods)
@@ -299,6 +344,7 @@ uint32_t layer_state_set_user(uint32_t state) {
 	uint8_t coding[] = { RGB_TEAL };
 	uint8_t movement[] = { RGB_ORANGE };
 	uint8_t colemak[] = { RGB_RED };
+	uint8_t umlauts[] = { RGB_CORAL };
 	switch (layer) {
 		case BASE:
 			break;
@@ -317,6 +363,11 @@ uint32_t layer_state_set_user(uint32_t state) {
 			col->on = true;
 			ergodox_right_led_3_on();
 			break;
+		case UMLAUTS:
+			memcpy(col->rgb, umlauts, 3);
+			col->on = true;
+			ergodox_right_led_1_on();
+			ergodox_right_led_2_on();
 		default:
 			break;
 	}
