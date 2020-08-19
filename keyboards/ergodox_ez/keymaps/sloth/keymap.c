@@ -45,25 +45,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,				KC_4,				KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,				KC_R,				KC_T,			_______,
-		_______,			LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
+		KC_ESC,				LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
 		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,				KC_V,				KC_B,			KC_ESC,
 		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			TT(MOVEMENT),
 
 		/* left hand thumbs */
-		KC_HOME,			KC_END,
-		_______,
-		KC_SPACE,			KC_ENTER,					KC_LEAD,
+		OSM(MOD_LCTL),		OSM(MOD_LALT),
+		OSM(MOD_LSFT),
+		KC_SPACE,			KC_TAB,						_______,
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,				KC_9,				KC_0,			_______,
-		_______,			KC_Y,						KC_U,					LT(UMLAUTS, KC_I),	KC_O,				KC_P,			_______,
-		KC_H,				RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_MINUS,
+		_______,			KC_Y,						KC_U,					KC_I,				KC_O,				KC_P,			_______,
+		LT(UMLAUTS, KC_H),	RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_LEAD,
 		KC_ESC,				KC_N,						KC_M,					KC_COMMA,			KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
 
 		/* right hand thumbs */
-		KC_PGUP,			KC_PGDOWN,
-		_______,
-		KC_LEAD,			KC_TAB,						KC_BSPACE
+		OSM(MOD_RALT),		OSM(MOD_RCTL),
+		OSM(MOD_RSFT),
+		_______,			KC_ENTER,					KC_BSPACE
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -79,8 +79,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			KC_J,						KC_L,					LT(UMLAUTS, KC_U),	KC_Y,				KC_SCOLON,		_______,
-		KC_K,				RGUI_T(KC_N),				RALT_T(KC_E),			RCTL_T(KC_I),		RSFT_T(KC_O),		_______,
+		_______,			KC_J,						KC_L,					KC_U,				KC_Y,				KC_SCOLON,		_______,
+		LT(UMLAUTS, KC_K),	RGUI_T(KC_N),				RALT_T(KC_E),			RCTL_T(KC_I),		RSFT_T(KC_O),		_______,
 		_______,			KC_M,						KC_H,					_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -117,8 +117,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			_______,					KC_HOME,				KC_UP,				KC_END,				KC_PGUP,		_______,
-		_______,			_______,					KC_LEFT,				KC_DOWN,			KC_RIGHT,			KC_PGDOWN,
+		_______,			_______,					KC_PGUP,				KC_UP,				KC_PGDOWN,			KC_HOME,		_______,
+		_______,			_______,					KC_LEFT,				KC_DOWN,			KC_RIGHT,			KC_END,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -129,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			KC_PGUP,					KC_HOME,				LCTL(KC_LEFT),		LCTL(KC_RIGHT),		KC_END,			_______,
-		KC_PGDOWN,			KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,			_______,
+		KC_LEFT,			KC_DOWN,					KC_UP,					KC_RIGHT,			_______,			_______,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			RALT(KC_Q),					RALT(KC_P),				RALT(KC_Y),			RALT(KC_S),			_______,
+		_______,			RALT(KC_Q),					RALT(KC_P),				RALT(KC_Y),			RALT(KC_S),			RALT(KC_5),
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -243,7 +243,7 @@ struct colordef_t modifier_colors[] = {
 		.on = false, .idx = { 3, 8, 13, 18, 27, 32, 37, 42, -1 }, .rgb = { RGB_TEAL },
 	},
 	[2] = {
-		.on = false, .idx = { 2, 7, 12, 17, 26, 31, 36, 41, -1 }, .rgb = { RGB_CORAL },
+		.on = false, .idx = { 2, 7, 12, 17, 26, 31, 36, 41, -1 }, .rgb = { RGB_ORANGE },
 	},
 	[3] = {
 		.on = false, .idx = { 1, 6, 11, 16, 25, 30, 35, 40, -1 }, .rgb = { RGB_SPRINGGREEN },
@@ -276,7 +276,7 @@ void set_color(uint16_t mask)
 void light_up_layers(void)
 {
 	if (layer_state_is(MOVEMENT)) {
-		uint8_t arrows[] = { 37, 36, 35, 31, 11, 12, 13, 14 };
+		uint8_t arrows[] = { 37, 36, 35, 31, 10, 11, 12, 13 };
 		uint8_t other_movement[] = { 32, 30, 29, 34, 6, 7, 8, 9 };
 		for (int i = 0; i < sizeof(arrows); ++i)
 			rgb_matrix_set_color(arrows[i], RGB_WHITE);
@@ -284,10 +284,9 @@ void light_up_layers(void)
 			rgb_matrix_set_color(other_movement[i], RGB_GOLDENROD);
 	}
 	if (layer_state_is(UMLAUTS)) {
-		uint8_t umlauts[] = { 38, 37, 36, 35 };
+		uint8_t umlauts[] = { 38, 37, 36, 35, 34 };
 		for (int i = 0; i < sizeof(umlauts); ++i)
-			rgb_matrix_set_color(umlauts[i], RGB_PINK);
-
+			rgb_matrix_set_color(umlauts[i], RGB_CORAL);
 	}
 }
 
@@ -303,11 +302,11 @@ void light_up_modifiers(void)
 	for (int i = 0; i < sizeof(ctrl); ++i)
 		rgb_matrix_set_color(ctrl[i], RGB_TEAL);
 	for (int i = 0; i < sizeof(alt); ++i)
-		rgb_matrix_set_color(alt[i], RGB_CORAL);
+		rgb_matrix_set_color(alt[i], RGB_ORANGE);
 	for (int i = 0; i < sizeof(gui); ++i)
 		rgb_matrix_set_color(gui[i], RGB_SPRINGGREEN);
 
-	rgb_matrix_set_color(7, RGB_PINK);
+	rgb_matrix_set_color(10, RGB_PINK);
 }
 
 void rgb_matrix_indicators_user(void)
