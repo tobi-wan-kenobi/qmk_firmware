@@ -17,22 +17,22 @@ enum layers {
 
 #if 0
 		/* left hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* left hand thumbs */
 		_______,			_______,
 		_______,
 		_______,			_______,					_______,
 		/* right hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -43,46 +43,46 @@ enum layers {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[BASE] = LAYOUT_ergodox(
 		/* left hand */
-		TG(COLEMAK),		KC_1,						KC_2,					KC_3,			KC_4,				KC_5,			KC_HOME,
-		LALT_T(KC_ESC),		KC_Q,						KC_W,					KC_E,			KC_R,				KC_T,			KC_PGUP,
-		LCTL_T(KC_TAB),		LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),	LGUI_T(KC_F),		KC_G,
-		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,			KC_V,				KC_B,			LT(UMLAUTS, KC_ESC),
-		RGB_SOLID,			RGB_HEATMAP,				_______,				TT(MOVEMENT),	OSM(MOD_LCTL),
+		TG(COLEMAK),		KC_1,						KC_2,					KC_3,				KC_4,				KC_5,			_______,
+		_______,			KC_Q,						KC_W,					KC_E,				KC_R,				KC_T,			_______,
+		_______,			LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
+		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,				KC_V,				KC_B,			KC_ESC,
+		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			TT(MOVEMENT),
 
 		/* left hand thumbs */
-		OSM(MOD_LCTL),		OSM(MOD_LALT),
-		OSM(MOD_LSFT),
+		_______,			_______,
+		_______,
 		KC_SPACE,			KC_ENTER,					KC_LEAD,
 		/* right hand */
-		KC_END,				KC_6,						KC_7,					KC_8,			KC_9,				KC_0,			_______,
-		KC_PGDOWN,			KC_Y,						KC_U,					KC_I,			KC_O,				KC_P,			_______,
-		KC_H,				RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),	RSFT_T(KC_SCOLON),	KC_MINUS,
-		LT(UMLAUTS, KC_ESC),KC_N,						KC_M,					KC_COMMA,		KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
-		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,
+		_______,			KC_6,						KC_7,					KC_8,				KC_9,				KC_0,			_______,
+		_______,			KC_Y,						KC_U,					LT(UMLAUTS, KC_I),	KC_O,				KC_P,			_______,
+		KC_H,				RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_MINUS,
+		KC_ESC,				KC_N,						KC_M,					KC_COMMA,			KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
+		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
 
 		/* right hand thumbs */
-		OSM(MOD_RALT),		OSM(MOD_RCTL),
-		OSM(MOD_RSFT),
+		_______,			_______,
+		_______,
 		KC_LEAD,			KC_TAB,						KC_BSPACE
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				KC_F,			KC_P,				KC_B,			_______,
-		_______,			_______,					KC_R,					KC_S,			KC_T,				_______,
-		_______,			_______,					_______,				_______,		KC_D,				KC_V,			_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				KC_F,				KC_P,				KC_B,			_______,
+		_______,			_______,					LCTL_T(KC_R),			LALT_T(KC_S),		LGUI_T(KC_T),		_______,
+		_______,			_______,					_______,				_______,			KC_D,				KC_V,			_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* left hand thumbs */
 		_______,			_______,
 		_______,
 		_______,			_______,					_______,
 		/* right hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			KC_J,						KC_L,					KC_U,			KC_Y,				KC_SCOLON,		_______,
-		KC_K,				KC_N,						KC_E		,			KC_I,			KC_O,				_______,
-		_______,			KC_M,						KC_H,					_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			KC_J,						KC_L,					KC_U,				KC_Y,				KC_SCOLON,		_______,
+		KC_K,				RGUI_T(KC_N),				RALT_T(KC_E),			RCTL_T(KC_I),		RSFT_T(KC_O),		_______,
+		_______,			KC_M,						KC_H,					_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -91,11 +91,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 	[CODING] = LAYOUT_ergodox(
 		/* left hand */
-		_______,			KC_F1,						KC_F2,					KC_F3,			KC_F4,				KC_F5,			_______,
-		_______,			KC_EXLM,					KC_AT,					KC_LCBR,		KC_RCBR,			KC_DLR,			_______,
-		_______,			KC_ASTR,					KC_MINUS,				KC_LBRACKET,	KC_RBRACKET,		KC_UNDS,
-		_______,			KC_PIPE,					KC_TILD,				KC_LABK,		KC_RABK,			KC_PLUS,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			KC_F1,						KC_F2,					KC_F3,				KC_F4,				KC_F5,			_______,
+		_______,			KC_EXLM,					KC_AT,					KC_LCBR,			KC_RCBR,			KC_DLR,			_______,
+		_______,			KC_ASTR,					KC_MINUS,				KC_LBRACKET,		KC_RBRACKET,		KC_UNDS,
+		_______,			KC_PIPE,					KC_TILD,				KC_LABK,			KC_RABK,			KC_PLUS,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* left hand thumbs */
 		_______,			_______,
@@ -103,11 +103,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		KC_ESC,				_______,					_______,
 
 		/* right hand */
-		_______,			KC_F6,						KC_F7,					KC_F8,			KC_F9,				KC_F10,			_______,
-		_______,			KC_CIRC,					KC_EQUAL,				KC_PERC,		KC_HASH,			KC_QUES,		_______,
-		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_AMPR,		KC_COLON,			_______,
-		_______,			_______,					KC_DQUO,				KC_QUOTE,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			KC_F6,						KC_F7,					KC_F8,				KC_F9,				KC_F10,			_______,
+		_______,			KC_CIRC,					KC_EQUAL,				KC_PERC,			KC_HASH,			KC_QUES,		_______,
+		KC_GRAVE,			KC_LPRN,					KC_RPRN,				KC_AMPR,			KC_COLON,			_______,
+		_______,			_______,					KC_DQUO,				KC_QUOTE,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -116,22 +116,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					KC_HOME,				KC_UP,			KC_END,				KC_PGUP,		_______,
-		_______,			_______,					KC_LEFT,				KC_DOWN,		KC_RIGHT,			KC_PGDOWN,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					KC_HOME,				KC_UP,				KC_END,				KC_PGUP,		_______,
+		_______,			_______,					KC_LEFT,				KC_DOWN,			KC_RIGHT,			KC_PGDOWN,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* left hand thumbs */
 		_______,			_______,
 		_______,
 		_______,			_______,					_______,
 		/* right hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			KC_PGUP,					KC_HOME,				LCTL(KC_LEFT),	LCTL(KC_RIGHT),		KC_END,			_______,
-		KC_PGDOWN,			KC_LEFT,					KC_DOWN,				KC_UP,			KC_RIGHT,			_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			KC_PGUP,					KC_HOME,				LCTL(KC_LEFT),		LCTL(KC_RIGHT),		KC_END,			_______,
+		KC_PGDOWN,			KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,			_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -140,22 +140,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	),
 	[UMLAUTS] = LAYOUT_ergodox(
 		/* left hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			RALT(KC_Q),					RALT(KC_P),				RALT(KC_Y),		RALT(KC_S),			_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			RALT(KC_Q),					RALT(KC_P),				RALT(KC_Y),			RALT(KC_S),			_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* left hand thumbs */
 		_______,			_______,
 		_______,
 		_______,			_______,					_______,
 		/* right hand */
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,			_______,
-		_______,			_______,					_______,				_______,		_______,			_______,		_______,
-		_______,			_______,					_______,				_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -286,7 +286,7 @@ void light_up_layers(void)
 	if (layer_state_is(UMLAUTS)) {
 		uint8_t umlauts[] = { 38, 37, 36, 35 };
 		for (int i = 0; i < sizeof(umlauts); ++i)
-			rgb_matrix_set_color(umlauts[i], RGB_ORANGE);
+			rgb_matrix_set_color(umlauts[i], RGB_PINK);
 
 	}
 }
@@ -306,6 +306,8 @@ void light_up_modifiers(void)
 		rgb_matrix_set_color(alt[i], RGB_CORAL);
 	for (int i = 0; i < sizeof(gui); ++i)
 		rgb_matrix_set_color(gui[i], RGB_SPRINGGREEN);
+
+	rgb_matrix_set_color(7, RGB_PINK);
 }
 
 void rgb_matrix_indicators_user(void)
@@ -322,8 +324,8 @@ void rgb_matrix_indicators_user(void)
 	set_color(MOD_MASK_ALT);
 	set_color(MOD_MASK_GUI);
 
-	light_up_layers();
 	light_up_modifiers();
+	light_up_layers();
 }
 
 void oneshot_mods_changed_user(uint8_t mods)
@@ -361,7 +363,7 @@ uint32_t layer_state_set_user(uint32_t state) {
 	col->on = false;
 	uint8_t coding[] = { RGB_TEAL };
 	uint8_t movement[] = { RGB_ORANGE };
-	uint8_t colemak[] = { RGB_RED };
+	uint8_t colemak[] = { RGB_GREEN };
 	uint8_t umlauts[] = { RGB_CORAL };
 	switch (layer) {
 		case BASE:
