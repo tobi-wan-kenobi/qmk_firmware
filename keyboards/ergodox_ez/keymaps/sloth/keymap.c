@@ -50,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			TT(MOVEMENT),
 
 		/* left hand thumbs */
-		_______,			_______,
+		KC_HOME,			KC_END,
 		_______,
 		KC_SPACE,			KC_ENTER,					KC_LEAD,
 		/* right hand */
@@ -61,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
 
 		/* right hand thumbs */
-		_______,			_______,
+		KC_PGUP,			KC_PGDOWN,
 		_______,
 		KC_LEAD,			KC_TAB,						KC_BSPACE
 	),
@@ -79,7 +79,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			KC_J,						KC_L,					KC_U,				KC_Y,				KC_SCOLON,		_______,
+		_______,			KC_J,						KC_L,					LT(UMLAUTS, KC_U),	KC_Y,				KC_SCOLON,		_______,
 		KC_K,				RGUI_T(KC_N),				RALT_T(KC_E),			RCTL_T(KC_I),		RSFT_T(KC_O),		_______,
 		_______,			KC_M,						KC_H,					_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
