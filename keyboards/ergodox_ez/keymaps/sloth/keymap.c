@@ -12,6 +12,7 @@ enum layers {
 	CODING = 2,
 	MOVEMENT = 3,
 	UMLAUTS = 4,
+	NUMPAD = 5,
 	NONE = 255,
 };
 
@@ -45,9 +46,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,				KC_4,				KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,				KC_R,				KC_T,			_______,
-		KC_TAB,				LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
+		KC_TAB,				KC_A,						KC_S,					KC_D,				KC_F,				KC_G,
 		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,				KC_V,				KC_B,			KC_ESC,
-		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			MO(MOVEMENT),
+		RGB_SOLID,			RGB_HEATMAP,				_______,				TT(NUMPAD),			MO(MOVEMENT),
 
 		/* left hand thumbs */
 		OSM(MOD_LGUI),		KC_HOME,
@@ -56,8 +57,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand */
 		_______,			KC_6,						KC_7,					KC_8,				KC_9,				KC_0,			KC_PGUP,
 		_______,			KC_Y,						KC_U,					KC_I,				KC_O,				KC_P,			KC_PGDOWN,
-		LT(UMLAUTS, KC_H),	RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_ENTER,
-		KC_ESC,				KC_N,						KC_M,					KC_COMMA,			KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
+		KC_H,				KC_J,						KC_K,					KC_L,				KC_SCOLON,			KC_ENTER,
+		MO(UMLAUTS),		KC_N,						KC_M,					KC_COMMA,			KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
 		MO(CODING),			KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
 
 		/* right hand thumbs */
@@ -69,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				KC_F,				KC_P,				KC_B,			_______,
-		_______,			_______,					LCTL_T(KC_R),			LALT_T(KC_S),		LGUI_T(KC_T),		_______,
+		_______,			_______,					KC_R,					KC_S,				KC_T,				_______,
 		_______,			_______,					_______,				_______,			KC_D,				KC_V,			_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -80,7 +81,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			KC_J,						KC_L,					KC_U,				KC_Y,				KC_SCOLON,		_______,
-		LT(UMLAUTS, KC_K),	RGUI_T(KC_N),				RALT_T(KC_E),			RCTL_T(KC_I),		RSFT_T(KC_O),		_______,
+		KC_K,				KC_N,						KC_E,					KC_I,				KC_O,				_______,
 		_______,			KC_M,						KC_H,					_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -156,6 +157,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,				_______,			_______,			_______,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
+
+		/* right hand thumbs */
+		_______,			_______,
+		_______,
+		_______,			_______,					_______
+	),
+	[NUMPAD] = LAYOUT_ergodox(
+		/* left hand */
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			KC_AT,				KC_COLON,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,
+
+		/* left hand thumbs */
+		_______,			_______,
+		_______,
+		_______,			_______,					_______,
+		/* right hand */
+		_______,			_______,					_______,				KC_SLASH,			KC_ASTR,			KC_MINUS,		_______,
+		_______,			_______,					KC_7,					KC_8,				KC_9,				KC_PLUS,		_______,
+		_______,			KC_4,						KC_5,					KC_6,				KC_DOT,				_______,
+		_______,			_______,					KC_1,					KC_2,				KC_3,				_______,		_______,
+		KC_0,				KC_BSPACE,					KC_DEL,					_______,			_______,
 
 		/* right hand thumbs */
 		_______,			_______,
@@ -245,29 +270,11 @@ void light_up_layers(void)
 		for (int i = 0; i < sizeof(umlauts); ++i)
 			rgb_matrix_set_color(umlauts[i], RGB_CORAL);
 	}
-}
-
-void light_up_modifiers(void)
-{
-	
-	if (layer_state_is(CODING))
-		return;
-
-	uint8_t shift[] = { 14, 38 };
-	uint8_t ctrl[] = { 13, 37 };
-	uint8_t alt[] = { 12, 36 };
-	uint8_t gui[] = { 11, 35 };
-
-	for (int i = 0; i < sizeof(shift); ++i)
-		rgb_matrix_set_color(shift[i], RGB_GOLD);
-	for (int i = 0; i < sizeof(ctrl); ++i)
-		rgb_matrix_set_color(ctrl[i], RGB_TEAL);
-	for (int i = 0; i < sizeof(alt); ++i)
-		rgb_matrix_set_color(alt[i], RGB_ORANGE);
-	for (int i = 0; i < sizeof(gui); ++i)
-		rgb_matrix_set_color(gui[i], RGB_SPRINGGREEN);
-
-	rgb_matrix_set_color(10, RGB_PINK);
+	if (layer_state_is(NUMPAD)) {
+		uint8_t numpad[] = { 6, 7, 8, 11, 12, 13, 16, 17, 18 };
+		for (int i = 0; i < sizeof(numpad); ++i)
+			rgb_matrix_set_color(numpad[i], RGB_WHITE);
+	}
 }
 
 void rgb_matrix_indicators_user(void)
@@ -279,12 +286,14 @@ void rgb_matrix_indicators_user(void)
 
 	set_layer_color();
 
+	rgb_matrix_set_color(11, RGB_ORANGE);
+	rgb_matrix_set_color(35, RGB_ORANGE);
+
 	set_color(MOD_MASK_SHIFT);
 	set_color(MOD_MASK_CTRL);
 	set_color(MOD_MASK_ALT);
 	set_color(MOD_MASK_GUI);
 
-	light_up_modifiers();
 	light_up_layers();
 }
 
@@ -325,6 +334,7 @@ uint32_t layer_state_set_user(uint32_t state) {
 	uint8_t movement[] = { RGB_ORANGE };
 	uint8_t colemak[] = { RGB_GREEN };
 	uint8_t umlauts[] = { RGB_CORAL };
+	uint8_t numpad[] = { RGB_WHITE };
 	switch (layer) {
 		case BASE:
 			break;
@@ -348,6 +358,11 @@ uint32_t layer_state_set_user(uint32_t state) {
 			col->on = true;
 			ergodox_right_led_1_on();
 			ergodox_right_led_2_on();
+		case NUMPAD:
+			memcpy(col->rgb, numpad, 3);
+			col->on = true;
+			ergodox_right_led_1_on();
+			ergodox_right_led_3_on();
 		default:
 			break;
 	}
