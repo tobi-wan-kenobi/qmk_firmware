@@ -15,15 +15,6 @@ enum layers {
 	NONE = 255,
 };
 
-enum taps {
-	TD_ESC_CAPS
-};
-
-qk_tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Escape, twice for Caps Lock
-    [TD_ESC_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_ESC, KC_CAPS),
-};
-
 #if 0
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
@@ -54,25 +45,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* left hand */
 		TG(COLEMAK),		KC_1,						KC_2,					KC_3,				KC_4,				KC_5,			_______,
 		_______,			KC_Q,						KC_W,					KC_E,				KC_R,				KC_T,			_______,
-		TD_ESC_CAPS,		LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
+		KC_TAB,				LSFT_T(KC_A),				LCTL_T(KC_S),			LALT_T(KC_D),		LGUI_T(KC_F),		KC_G,
 		OSM(MOD_LSFT),		KC_Z,						KC_X,					KC_C,				KC_V,				KC_B,			KC_ESC,
-		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			TT(MOVEMENT),
+		RGB_SOLID,			RGB_HEATMAP,				_______,				_______,			MO(MOVEMENT),
 
 		/* left hand thumbs */
-		OSM(MOD_LCTL),		OSM(MOD_LALT),
-		OSM(MOD_LSFT),
-		KC_SPACE,			KC_TAB,						_______,
+		OSM(MOD_LGUI),		KC_HOME,
+		OSM(MOD_LALT),
+		KC_SPACE,			OSM(MOD_LSFT),				OSM(MOD_LCTL),
 		/* right hand */
-		_______,			KC_6,						KC_7,					KC_8,				KC_9,				KC_0,			_______,
-		_______,			KC_Y,						KC_U,					KC_I,				KC_O,				KC_P,			_______,
-		LT(UMLAUTS, KC_H),	RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_LEAD,
+		_______,			KC_6,						KC_7,					KC_8,				KC_9,				KC_0,			KC_PGUP,
+		_______,			KC_Y,						KC_U,					KC_I,				KC_O,				KC_P,			KC_PGDOWN,
+		LT(UMLAUTS, KC_H),	RGUI_T(KC_J),				RALT_T(KC_K),			RCTL_T(KC_L),		RSFT_T(KC_SCOLON),	KC_ENTER,
 		KC_ESC,				KC_N,						KC_M,					KC_COMMA,			KC_DOT,				KC_SLASH,		OSM(MOD_RSFT),
-		OSL(CODING),		KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
+		MO(CODING),			KC_LEFT,					KC_DOWN,				KC_UP,				KC_RIGHT,
 
 		/* right hand thumbs */
-		OSM(MOD_RALT),		OSM(MOD_RCTL),
-		OSM(MOD_RSFT),
-		_______,			KC_ENTER,					KC_BSPACE
+		KC_END,				OSM(MOD_RGUI),
+		OSM(MOD_RALT),
+		OSM(MOD_LCTL),		OSM(MOD_RSFT),				KC_BSPACE
 	),
 	[COLEMAK] = LAYOUT_ergodox(
 		/* left hand */
@@ -126,8 +117,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			_______,					KC_PGUP,				KC_UP,				KC_PGDOWN,			KC_HOME,		_______,
-		_______,			_______,					KC_LEFT,				KC_DOWN,			KC_RIGHT,			KC_END,
+		_______,			_______,					_______,				_______,			_______,			_______,		_______,
+		_______,			_______,					_______,				_______,			_______,			_______,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -137,8 +128,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______,
 		/* right hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
-		_______,			KC_PGUP,					KC_HOME,				LCTL(KC_LEFT),		LCTL(KC_RIGHT),		KC_END,			_______,
-		KC_LEFT,			KC_DOWN,					KC_UP,					KC_RIGHT,			_______,			_______,
+		_______,			KC_PGUP,					KC_HOME,				KC_UP,				KC_END,				KC_PGUP,		_______,
+		KC_PGDOWN,			KC_LEFT,					KC_DOWN,				KC_RIGHT,			KC_PGDOWN,			_______,
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
 		_______,			_______,					_______,				_______,			_______,
 
@@ -172,52 +163,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		_______,			_______,					_______
 	),
 };
-
-LEADER_EXTERNS();
-void matrix_scan_user(void)
-{
-	LEADER_DICTIONARY() {
-		leading = false;
-		leader_end();
-
-		SEQ_ONE_KEY(KC_T) {
-			tap_code16(LGUI(KC_ENTER));
-		}
-		SEQ_ONE_KEY(KC_C) {
-			tap_code16(LGUI(LSFT(KC_C)));
-		}
-		SEQ_ONE_KEY(KC_A) {
-			tap_code16(RALT(KC_Q));
-		}
-		SEQ_ONE_KEY(KC_O) {
-			tap_code16(RALT(KC_P));
-		}
-		SEQ_ONE_KEY(KC_U) {
-			tap_code16(RALT(KC_Y));
-		}
-		SEQ_ONE_KEY(KC_S) {
-			tap_code16(RALT(KC_S));
-		}
-		SEQ_TWO_KEYS(KC_F, KC_L) {
-			tap_code16(LGUI(KC_L));
-		}
-		SEQ_TWO_KEYS(KC_F, KC_H) {
-			tap_code16(LGUI(KC_H));
-		}
-		SEQ_TWO_KEYS(KC_M, KC_L) {
-			tap_code16(LGUI(LSFT(KC_L)));
-		}
-		SEQ_TWO_KEYS(KC_M, KC_H) {
-			tap_code16(LGUI(LSFT(KC_H)));
-		}
-		SEQ_TWO_KEYS(KC_W, KC_L) {
-			tap_code16(LGUI(LCTL(KC_L)));
-		}
-		SEQ_TWO_KEYS(KC_W, KC_H) {
-			tap_code16(LGUI(LCTL(KC_H)));
-		}
-	}
-}
 
 extern bool g_suspend_state;
 extern rgb_config_t rgb_matrix_config;
@@ -285,12 +230,15 @@ void set_color(uint16_t mask)
 void light_up_layers(void)
 {
 	if (layer_state_is(MOVEMENT)) {
-		uint8_t arrows[] = { 37, 36, 35, 31, 10, 11, 12, 13 };
-		uint8_t other_movement[] = { 32, 30, 29, 34, 6, 7, 8, 9 };
+		uint8_t arrows[] = { 11, 12, 13, 7 };
+		uint8_t other_movement[] = { 10, 5, 9, 14 };
+		uint8_t home_end[] = { 6, 8 };
 		for (int i = 0; i < sizeof(arrows); ++i)
 			rgb_matrix_set_color(arrows[i], RGB_WHITE);
 		for (int i = 0; i < sizeof(other_movement); ++i)
-			rgb_matrix_set_color(other_movement[i], RGB_GOLDENROD);
+			rgb_matrix_set_color(other_movement[i], RGB_ORANGE);
+		for (int i = 0; i < sizeof(home_end); ++i)
+			rgb_matrix_set_color(home_end[i], RGB_PINK);
 	}
 	if (layer_state_is(UMLAUTS)) {
 		uint8_t umlauts[] = { 38, 37, 36, 35, 34 };
@@ -301,6 +249,10 @@ void light_up_layers(void)
 
 void light_up_modifiers(void)
 {
+	
+	if (layer_state_is(CODING))
+		return;
+
 	uint8_t shift[] = { 14, 38 };
 	uint8_t ctrl[] = { 13, 37 };
 	uint8_t alt[] = { 12, 36 };
