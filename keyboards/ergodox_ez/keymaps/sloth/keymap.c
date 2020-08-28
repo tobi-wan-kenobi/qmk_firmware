@@ -16,6 +16,12 @@ enum layers {
 	NONE = 255,
 };
 
+/* Thoughts
+ * - symmetry: put -/_, brackets etc. on different hands, but same position?
+ *
+ *
+ */
+
 #if 0
 		/* left hand */
 		_______,			_______,					_______,				_______,			_______,			_______,		_______,
@@ -113,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		/* right hand thumbs */
 		_______,			_______,
 		_______,
-		_______,			_______,					_______
+		_______,			_______,					KC_DEL
 	),
 	[MOVEMENT] = LAYOUT_ergodox(
 		/* left hand */
